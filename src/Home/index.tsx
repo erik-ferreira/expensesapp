@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FlatList } from "react-native";
-import { VictoryPie } from "victory-native";
+import { VictoryPie, VictoryTooltip } from "victory-native";
 
 import { EXPENSES } from "../utils/expenses";
 
@@ -35,9 +35,14 @@ export function Home() {
           y="value"
           colorScale={data.map((expense) => expense.color)}
           innerRadius={80}
+          padAngle={4}
+          animate={{
+            duration: 3000,
+            easing: "quad",
+          }}
           style={{
             labels: {
-              fill: "red",
+              fill: "white",
             },
             data: {
               fillOpacity: ({ datum }) =>
@@ -45,11 +50,20 @@ export function Home() {
                   ? 1
                   : 0.5,
               stroke: ({ datum }) =>
-                datum.id === categorySelected || categorySelected === ""
-                  ? datum.color
-                  : "none",
+                datum.id === categorySelected ? datum.color : "none",
+              strokeOpacity: 0.5,
+              strokeWidth: 10,
             },
           }}
+          labelComponent={
+            <VictoryTooltip
+              renderInPortal={false}
+              flyoutStyle={{
+                stroke: 0,
+                fill: ({ datum }) => datum.color,
+              }}
+            />
+          }
         />
       </Chart>
 
